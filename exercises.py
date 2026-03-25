@@ -63,12 +63,12 @@ print("TODO: predict the final state, then uncomment the code\n")
 
 q0 = cirq.LineQubit(0)
 
-# circuit = cirq.Circuit([
-#     cirq.X(q0),
-#     cirq.H(q0),
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    cirq.X(q0),
+    cirq.H(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -82,12 +82,12 @@ print("EXERCISE 2: H then X on one qubit")
 print("=" * 50)
 print("TODO: predict the final state, then uncomment the code\n")
 
-# circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.X(q0),
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    cirq.H(q0),
+    cirq.X(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -104,25 +104,25 @@ print("EXERCISE 3a: H then Z then measure")
 print("=" * 50)
 print("TODO: predict, then uncomment\n")
 
-# circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.Z(q0),
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    cirq.H(q0),
+    cirq.Z(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 print("=" * 50)
 print("EXERCISE 3b: H then Z then H then measure")
 print("=" * 50)
 print("TODO: predict, then uncomment\n")
 
-# circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.Z(q0),
-#     cirq.H(q0),
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    cirq.H(q0),
+    cirq.Z(q0),
+    cirq.H(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -138,11 +138,11 @@ print("TODO: predict the 4-element state vector, then uncomment\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 
-# circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    cirq.H(q0),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -157,12 +157,12 @@ print("EXERCISE 5: Bell state")
 print("=" * 50)
 print("TODO: predict the 4-element state vector, then uncomment\n")
 
-# circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.CNOT(q0, q1),
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -181,20 +181,33 @@ print("EXERCISE 6: The other three Bell states")
 print("=" * 50)
 print("TODO: build circuits for each, verify with show()\n")
 
-# circuit_a = cirq.Circuit([
-#     # TODO: (|00⟩ - |11⟩) / √2
-# ])
-# show(circuit_a)
+circuit_a = cirq.Circuit([
+    # TODO: (|00⟩ - |11⟩) / √2
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.Z(q0),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_a)
 
-# circuit_b = cirq.Circuit([
-#     # TODO: (|01⟩ + |10⟩) / √2
-# ])
-# show(circuit_b)
+circuit_b = cirq.Circuit([
+    # TODO: (|01⟩ + |10⟩) / √2
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.X(q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_b)
 
-# circuit_c = cirq.Circuit([
-#     # TODO: (|01⟩ - |10⟩) / √2
-# ])
-# show(circuit_c)
+circuit_c = cirq.Circuit([
+    # TODO: (|01⟩ - |10⟩) / √2
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.Z(q0),
+    cirq.X(q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_c)
 
 
 # ============================================================
@@ -210,13 +223,13 @@ print("TODO: predict, then uncomment\n")
 
 q0, q1, q2 = cirq.LineQubit.range(3)
 
-# circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.H(q1),
-#     cirq.H(q2),
-#     cirq.measure(q0, q1, q2, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    cirq.H(q0),
+    cirq.H(q1),
+    cirq.H(q2),
+    cirq.measure(q0, q1, q2, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -235,10 +248,10 @@ print("TODO: predict, then uncomment\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 
-# circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.CNOT(q0, q1),
-#     cirq.H(q0),
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.H(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
