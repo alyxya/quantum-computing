@@ -40,11 +40,6 @@ import numpy as np
 #   - H(q0): inverse QFT on 1 qubit is just H
 #   - Measure q0
 #
-# Trace through:
-#   |0>|1>  --H(q0)-->  (|0>+|1>)/sqrt(2) |1>
-#           --CZ----->  (|0> - |1>)/sqrt(2) |1>   (phase -1 kicks back)
-#           --H(q0)-->  |1>|1>
-#
 # PREDICT: q0 always measures 1 (binary 0.1 = 0.5).
 
 print("=" * 50)
@@ -54,10 +49,7 @@ print("PREDICT: q0 always measures 1 (binary 0.1 = phi = 0.5)\n")
 
 # q0, q1 = cirq.LineQubit.range(2)
 # circuit = cirq.Circuit([
-#     cirq.X(q1),
-#     cirq.H(q0),
-#     cirq.CZ(q0, q1),
-#     cirq.H(q0),
+#     # YOUR GATES HERE
 #     cirq.measure(q0, key='result'),
 # ])
 # show(circuit)
@@ -77,9 +69,7 @@ print("PREDICT: q0 always measures 1 (binary 0.1 = phi = 0.5)\n")
 #     (c0 is MSB, controls U^(2^1) = S^2 = Z)
 #   - controlled-S from c1 to t: S(t).controlled_by(c1)
 #     (c1 is LSB, controls U^(2^0) = S)
-#   - Inverse QFT on c0, c1:
-#       QFT_2: H(c0), cS(c0 controlled by c1), H(c1), SWAP(c0,c1)
-#       QFT_2_inv: SWAP(c0,c1), H(c1), cS_dag(c0 controlled by c1), H(c0)
+#   - Inverse QFT on c0, c1
 #   - Measure c0, c1
 #
 # PREDICT: counting qubits measure |01> (c0=0, c1=1),
@@ -92,20 +82,7 @@ print("PREDICT: c0,c1 = |01> (binary 0.01 = phi = 0.25)\n")
 
 # c0, c1, t = cirq.LineQubit.range(3)
 # circuit = cirq.Circuit([
-#     # Prepare eigenstate
-#     cirq.X(t),
-#     # Hadamard on counting qubits
-#     cirq.H(c0),
-#     cirq.H(c1),
-#     # Controlled-U^(2^k): c0 (MSB) gets S^2=Z, c1 (LSB) gets S
-#     cirq.CZ(c0, t),
-#     cirq.S(t).controlled_by(c1),
-#     # Inverse QFT on c0, c1
-#     cirq.SWAP(c0, c1),
-#     cirq.H(c1),
-#     (cirq.S**-1)(c0).controlled_by(c1),
-#     cirq.H(c0),
-#     # Measure
+#     # YOUR GATES HERE
 #     cirq.measure(c0, c1, key='result'),
 # ])
 # show(circuit)
@@ -123,9 +100,7 @@ print("PREDICT: c0,c1 = |01> (binary 0.01 = phi = 0.25)\n")
 #   - c1 controls U^(2^1) = T^2 = S    -> S(t).controlled_by(c1)
 #   - c2 controls U^(2^0) = T          -> T(t).controlled_by(c2)
 #
-# Inverse QFT on 3 qubits (c0, c1, c2):
-#   QFT_3: H(c0), cS(c0,c1), cT(c0,c2), H(c1), cS(c1,c2), H(c2), swaps
-#   QFT_3_inv: reverse the QFT circuit (swap order, dagger each gate)
+# Then apply inverse QFT on 3 qubits (c0, c1, c2) and measure.
 #
 # PREDICT: counting qubits measure |001> (binary 0.001 = 1/8 = 0.125).
 
@@ -136,27 +111,7 @@ print("PREDICT: c0,c1,c2 = |001> (binary 0.001 = phi = 0.125)\n")
 
 # c0, c1, c2, t = cirq.LineQubit.range(4)
 # circuit = cirq.Circuit([
-#     # Prepare eigenstate
-#     cirq.X(t),
-#     # Hadamard on counting qubits
-#     cirq.H(c0),
-#     cirq.H(c1),
-#     cirq.H(c2),
-#     # Controlled-U^(2^k)
-#     cirq.CZ(c0, t),                   # c0: T^4 = Z
-#     cirq.S(t).controlled_by(c1),      # c1: T^2 = S
-#     cirq.T(t).controlled_by(c2),      # c2: T^1 = T
-#     # Inverse QFT on c0, c1, c2
-#     # Step 1: SWAP to reverse bit order
-#     cirq.SWAP(c0, c2),
-#     # Step 2: H(c2), then controlled rotations, working from LSB to MSB
-#     cirq.H(c2),
-#     (cirq.S**-1)(c1).controlled_by(c2),
-#     cirq.H(c1),
-#     (cirq.T**-1)(c0).controlled_by(c2),
-#     (cirq.S**-1)(c0).controlled_by(c1),
-#     cirq.H(c0),
-#     # Measure
+#     # YOUR GATES HERE
 #     cirq.measure(c0, c1, c2, key='result'),
 # ])
 # show(circuit)
@@ -185,19 +140,7 @@ print("PREDICT: same results as exercises 1-3?\n")
 
 # def inverse_qft(qubits):
 #     """Build the inverse QFT circuit on the given qubits."""
-#     n = len(qubits)
-#     ops = []
-#     # Reverse qubit order
-#     for i in range(n // 2):
-#         ops.append(cirq.SWAP(qubits[i], qubits[n - 1 - i]))
-#     # Apply H and controlled rotations from last qubit to first
-#     for i in range(n - 1, -1, -1):
-#         # Controlled phase rotations from higher-index qubits
-#         for j in range(n - 1, i, -1):
-#             angle = -2 * np.pi / (2 ** (j - i + 1))
-#             ops.append(cirq.ZPowGate(exponent=angle / np.pi).on(qubits[i]).controlled_by(qubits[j]))
-#         ops.append(cirq.H(qubits[i]))
-#     return ops
+#     pass  # YOUR CODE HERE
 #
 #
 # def qpe_circuit(gate, n_counting):
@@ -210,23 +153,7 @@ print("PREDICT: same results as exercises 1-3?\n")
 #     Returns:
 #         A cirq.Circuit implementing QPE.
 #     """
-#     counting = cirq.LineQubit.range(n_counting)
-#     target = cirq.LineQubit(n_counting)
-#     circuit = cirq.Circuit()
-#     # Prepare eigenstate |1>
-#     circuit.append(cirq.X(target))
-#     # Hadamard on all counting qubits
-#     circuit.append(cirq.H.on_each(*counting))
-#     # Controlled-U^(2^k): qubit k (MSB first) controls gate^(2^(n-1-k))
-#     for k, qubit in enumerate(counting):
-#         power = 2 ** (n_counting - 1 - k)
-#         controlled_gate = (gate**power).on(target).controlled_by(qubit)
-#         circuit.append(controlled_gate)
-#     # Inverse QFT on counting qubits
-#     circuit.append(inverse_qft(counting))
-#     # Measure counting qubits
-#     circuit.append(cirq.measure(*counting, key='result'))
-#     return circuit
+#     pass  # YOUR CODE HERE
 #
 #
 # # Test: reproduce exercises 1-3
@@ -245,14 +172,7 @@ print("PREDICT: same results as exercises 1-3?\n")
 #
 # With 4 counting qubits we have 16 possible outcomes (0..15).
 # The exact value 0.15 * 16 = 2.4, which falls between 2 and 3.
-# So the measurement distribution should peak at:
-#   - 2 (binary 0010, representing 2/16 = 0.125)
-#   - 3 (binary 0011, representing 3/16 = 0.1875)
-# with smaller probabilities on nearby values.
-#
-# This demonstrates QPE's behavior for non-exact phases: you get
-# a probability distribution peaked near the true value, not a
-# single deterministic outcome.
+# So the measurement distribution should peak at 2 and 3.
 #
 # PREDICT: histogram peaks at values 2 and 3 (nearest to 2.4).
 

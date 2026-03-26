@@ -36,8 +36,6 @@ import numpy as np
 # which is exactly H.
 #
 # Verify: apply H to |0> and to |1>.
-#   |0> -> (|0> + |1>)/sqrt(2)
-#   |1> -> (|0> - |1>)/sqrt(2)
 # PREDICT: what are the state vectors?
 
 print("=" * 50)
@@ -46,10 +44,14 @@ print("=" * 50)
 print("PREDICT: what are the state vectors for QFT|0> and QFT|1>?\n")
 
 # q0 = cirq.LineQubit(0)
-# circuit_0 = cirq.Circuit([cirq.H(q0)])
+# circuit_0 = cirq.Circuit([
+#     # YOUR GATES HERE (QFT on |0>)
+# ])
 # show(circuit_0, label="QFT|0> (1 qubit)")
 #
-# circuit_1 = cirq.Circuit([cirq.X(q0), cirq.H(q0)])
+# circuit_1 = cirq.Circuit([
+#     # YOUR GATES HERE (QFT on |1>)
+# ])
 # show(circuit_1, label="QFT|1> (1 qubit)")
 
 
@@ -62,11 +64,7 @@ print("PREDICT: what are the state vectors for QFT|0> and QFT|1>?\n")
 #   3. H on q1
 #   4. SWAP q0, q1 (reverse qubit order)
 #
-# Apply to |00> (= |0>): all four amplitudes should be equal
-# at 0.5 (uniform superposition).
-#
-# Apply to |11> (= |3>): amplitudes should have phases from
-# the DFT: (1/2)[1, -i, -1, i].
+# Apply to |00> and |11>.
 # PREDICT: what are the amplitudes for QFT|00> and QFT|11>?
 
 print("=" * 50)
@@ -78,20 +76,13 @@ print("PREDICT: what are the amplitudes for QFT|00> and QFT|11>?\n")
 #
 # # QFT on |00>
 # qft2_on_00 = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.S(q0).controlled_by(q1),
-#     cirq.H(q1),
-#     cirq.SWAP(q0, q1),
+#     # YOUR GATES HERE
 # ])
 # show(qft2_on_00, label="QFT|00> (2 qubits)")
 #
 # # QFT on |11>
 # qft2_on_11 = cirq.Circuit([
-#     cirq.X(q0), cirq.X(q1),
-#     cirq.H(q0),
-#     cirq.S(q0).controlled_by(q1),
-#     cirq.H(q1),
-#     cirq.SWAP(q0, q1),
+#     # YOUR GATES HERE (prepare |11> then apply QFT)
 # ])
 # show(qft2_on_11, label="QFT|11> (2 qubits)")
 
@@ -108,7 +99,6 @@ print("PREDICT: what are the amplitudes for QFT|00> and QFT|11>?\n")
 #             [1, -1,  1, -1 ],
 #             [1, -i, -1,  i ]]
 #
-# They should match up to floating-point rounding.
 # PREDICT: does our hand-built circuit produce the correct DFT matrix?
 
 print("=" * 50)
@@ -118,10 +108,7 @@ print("PREDICT: does the circuit unitary match the DFT matrix?\n")
 
 # q0, q1 = cirq.LineQubit.range(2)
 # qft2_circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.S(q0).controlled_by(q1),
-#     cirq.H(q1),
-#     cirq.SWAP(q0, q1),
+#     # YOUR QFT GATES HERE (no state prep, no measurement)
 # ])
 #
 # circuit_unitary = np.round(cirq.unitary(qft2_circuit), 3)
@@ -148,11 +135,7 @@ print("PREDICT: does the circuit unitary match the DFT matrix?\n")
 #   3. H on q2
 #   4. SWAP q0, q2 (reverse qubit order)
 #
-# Apply to |000> (= |0>): should give uniform superposition
-# over all 8 states (each amplitude = 1/sqrt(8) ≈ 0.354).
-#
-# Apply to |001> (= |1>): should show a pattern of phases
-# e^(2*pi*i*k/8) for k = 0..7.
+# Apply to |000> and |001>.
 # PREDICT: what are the amplitudes for QFT|000> and QFT|001>?
 
 print("=" * 50)
@@ -164,26 +147,13 @@ print("PREDICT: what are the amplitudes for QFT|000> and QFT|001>?\n")
 #
 # # QFT on |000>
 # qft3_on_000 = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.S(q0).controlled_by(q1),
-#     cirq.T(q0).controlled_by(q2),
-#     cirq.H(q1),
-#     cirq.S(q1).controlled_by(q2),
-#     cirq.H(q2),
-#     cirq.SWAP(q0, q2),
+#     # YOUR GATES HERE
 # ])
 # show(qft3_on_000, label="QFT|000> (3 qubits)")
 #
 # # QFT on |001>
 # qft3_on_001 = cirq.Circuit([
-#     cirq.X(q2),
-#     cirq.H(q0),
-#     cirq.S(q0).controlled_by(q1),
-#     cirq.T(q0).controlled_by(q2),
-#     cirq.H(q1),
-#     cirq.S(q1).controlled_by(q2),
-#     cirq.H(q2),
-#     cirq.SWAP(q0, q2),
+#     # YOUR GATES HERE (prepare |001> then apply QFT)
 # ])
 # show(qft3_on_001, label="QFT|001> (3 qubits)")
 
@@ -196,7 +166,6 @@ print("PREDICT: what are the amplitudes for QFT|000> and QFT|001>?\n")
 #   - Replace S with S† (cirq.S**-1) and T with T† (cirq.T**-1)
 #
 # Apply QFT then QFT† to |01> and verify you get back |01>.
-# The round trip should be an identity operation.
 # PREDICT: what is the final state after QFT then QFT†?
 
 print("=" * 50)
@@ -211,18 +180,12 @@ print("PREDICT: what state do you get after QFT then QFT†?\n")
 #
 # # QFT
 # qft = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.S(q0).controlled_by(q1),
-#     cirq.H(q1),
-#     cirq.SWAP(q0, q1),
+#     # YOUR QFT GATES HERE
 # ])
 #
 # # Inverse QFT (reverse order, adjoint gates)
 # qft_inv = cirq.Circuit([
-#     cirq.SWAP(q0, q1),
-#     cirq.H(q1),
-#     (cirq.S**-1)(q0).controlled_by(q1),
-#     cirq.H(q0),
+#     # YOUR INVERSE QFT GATES HERE
 # ])
 #
 # # Round trip: prepare |01>, apply QFT, then QFT†
@@ -246,9 +209,6 @@ print("PREDICT: what state do you get after QFT then QFT†?\n")
 #
 # Apply QFT. The output should concentrate on |0> and |2>,
 # revealing that the period is 2 (= N/2 = 4/2).
-#
-# This is a preview of Shor's: the QFT converts periodicity
-# in amplitudes into peaks at multiples of N/period.
 # PREDICT: where does the probability concentrate after QFT?
 
 print("=" * 50)
@@ -259,17 +219,16 @@ print("PREDICT: which states have non-zero probability after QFT?\n")
 # q0, q1 = cirq.LineQubit.range(2)
 #
 # # Create (|0> + |2>)/sqrt(2) = (|00> + |10>)/sqrt(2)
-# state_prep = cirq.Circuit([cirq.H(q0)])
+# state_prep = cirq.Circuit([
+#     # YOUR GATES HERE
+# ])
 #
 # # Show the periodic input state
 # show(state_prep, label="Input: (|0> + |2>)/sqrt(2)")
 #
 # # Apply QFT
 # qft = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.S(q0).controlled_by(q1),
-#     cirq.H(q1),
-#     cirq.SWAP(q0, q1),
+#     # YOUR QFT GATES HERE
 # ])
 #
 # full_circuit = state_prep + qft

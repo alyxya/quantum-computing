@@ -167,9 +167,6 @@ print(f"  Verification: {f1} x {f2} = {f1 * f2}\n")
 #
 # The oracle is decomposed into controlled multiplications:
 #   - Counting qubit c_k controls "multiply by a^(2^k) mod N"
-#   - For a=7: a^1=7, a^2=4, a^4=1 (identity), a^8=1, ...
-#   - So we only need controlled-x7 and controlled-x4; higher
-#     powers are identity and can be skipped.
 #
 # The helper functions above build these as permutation matrices.
 # Verify the oracle is correct by checking the multiplication table.
@@ -183,38 +180,19 @@ print("=" * 50)
 print("PREDICT: |1> -> |7> -> |4> -> |13> -> |1> (cycle of 4)\n")
 
 # # Verify multiplication tables for the powers we need
-# verify_mod_mult(7, 15)   # a^1 = 7
+# verify_mod_mult(7, 15)
 # print()
-# verify_mod_mult(4, 15)   # a^2 = 4 (since 7^2 mod 15 = 4)
+# verify_mod_mult(4, 15)
 # print()
 #
 # # Demonstrate the oracle on a single work register
-# # Apply multiply-by-7 to |0001> (representing value 1)
 # work = cirq.LineQubit.range(4)
 # circuit = cirq.Circuit([
-#     cirq.X(work[3]),  # Set work register to |0001> = value 1
-# ])
-# print("Work register initialized to |1>:")
-# show(circuit)
-#
-# # Apply multiply-by-7 (uncontrolled, for testing)
-# gate = cirq.MatrixGate(mod_mult_matrix(7, 15))
-# circuit = cirq.Circuit([
-#     cirq.X(work[3]),          # |0001> = 1
-#     gate.on(*work),           # multiply by 7: 1 -> 7 = |0111>
+#     # YOUR CIRCUIT HERE
+#     # Initialize work register to |1>, apply multiply-by-7,
+#     # and measure to verify the oracle
 #     cirq.measure(*work, key='result'),
 # ])
-# print("After multiply by 7:")
-# show(circuit)
-#
-# # Apply multiply-by-7 twice (should give 7*7 mod 15 = 4)
-# circuit = cirq.Circuit([
-#     cirq.X(work[3]),          # |0001> = 1
-#     gate.on(*work),           # 1 -> 7
-#     gate.on(*work),           # 7 -> 49 mod 15 = 4 = |0100>
-#     cirq.measure(*work, key='result'),
-# ])
-# print("After multiply by 7 twice (should be 4):")
 # show(circuit)
 
 
@@ -238,7 +216,7 @@ print("PREDICT: |1> -> |7> -> |4> -> |13> -> |1> (cycle of 4)\n")
 #
 # The period is r=4. With 4 counting qubits (2^4=16 values),
 # the peaks should appear at multiples of 16/4 = 4:
-#   0, 4, 8, 12 (representing phases 0/16, 4/16, 8/16, 12/16)
+#   0, 4, 8, 12
 #
 # PREDICT: histogram shows 4 peaks at measured values 0, 4, 8, 12
 # (each with roughly equal probability ~25%).
@@ -250,42 +228,20 @@ print("PREDICT: peaks at 0, 4, 8, 12 (multiples of 16/r = 16/4 = 4)\n")
 
 # def inverse_qft(qubits):
 #     """Inverse QFT on a list of qubits."""
-#     n = len(qubits)
-#     ops = []
-#     # Reverse qubit order
-#     for i in range(n // 2):
-#         ops.append(cirq.SWAP(qubits[i], qubits[n - 1 - i]))
-#     # Apply H and controlled rotations from last qubit to first
-#     for i in range(n - 1, -1, -1):
-#         for j in range(n - 1, i, -1):
-#             angle = -2 * np.pi / (2 ** (j - i + 1))
-#             ops.append(
-#                 cirq.ZPowGate(exponent=angle / np.pi).on(qubits[i]).controlled_by(qubits[j])
-#             )
-#         ops.append(cirq.H(qubits[i]))
-#     return ops
+#     pass  # YOUR CODE HERE
 #
 #
-# # Build the circuit
 # counting = cirq.LineQubit.range(4)        # c0 (MSB) to c3 (LSB)
 # work = cirq.LineQubit.range(4, 8)         # w0 to w3
 # c0, c1, c2, c3 = counting
 #
 # circuit = cirq.Circuit()
+# # YOUR CIRCUIT HERE
 # # 1. Initialize work register to |1>
-# circuit.append(cirq.X(work[3]))  # |00000001> in work register = value 1
 # # 2. Hadamard on counting qubits
-# circuit.append(cirq.H.on_each(*counting))
-# # 3. Controlled modular multiplications
-# # c0: 7^(2^3) mod 15 = 7^8 mod 15 = 1 (identity, skip)
-# # c1: 7^(2^2) mod 15 = 7^4 mod 15 = 1 (identity, skip)
-# # c2: 7^(2^1) mod 15 = 7^2 mod 15 = 4
-# circuit.append(controlled_mod_mult(4, 15, c2, work))
-# # c3: 7^(2^0) mod 15 = 7^1 mod 15 = 7
-# circuit.append(controlled_mod_mult(7, 15, c3, work))
+# # 3. Controlled modular multiplications (use controlled_mod_mult helper)
 # # 4. Inverse QFT on counting qubits
-# circuit.append(inverse_qft(counting))
-# # 5. Measure
+# # 5. Measure counting qubits
 # circuit.append(cirq.measure(*counting, key='result'))
 #
 # show(circuit, repetitions=1000)
@@ -304,10 +260,9 @@ print("PREDICT: peaks at 0, 4, 8, 12 (multiples of 16/r = 16/4 = 4)\n")
 #
 # Expected values for a=7, N=15:
 #   m=0:  phi=0/16=0      -> 0/1, period r=1 (trivial, discard)
-#   m=4:  phi=4/16=1/4    -> 1/4, period r=4, 7^2=4, gcd(5,15)=5, gcd(3,15)=3
-#   m=8:  phi=8/16=1/2    -> 1/2, period r=2, 7^1=7, gcd(8,15)=1 (fail)
-#                            but we can also try r=4 as a multiple
-#   m=12: phi=12/16=3/4   -> 3/4, period r=4, same as m=4
+#   m=4:  phi=4/16=1/4    -> 1/4, period r=4
+#   m=8:  phi=8/16=1/2    -> 1/2, period r=2
+#   m=12: phi=12/16=3/4   -> 3/4, period r=4
 #
 # PREDICT: m=4 and m=12 directly give r=4, yielding factors 3 and 5.
 
@@ -318,49 +273,7 @@ print("PREDICT: continued fractions on m=4,12 give r=4, factors 3 x 5\n")
 
 # def post_process(measured_values, n_counting, a, N):
 #     """Classical post-processing of QPE measurement results."""
-#     n_qubits = n_counting
-#     factors_found = set()
-#
-#     for m in sorted(set(measured_values)):
-#         if m == 0:
-#             print(f"  m={m}: phase=0, trivial (skip)")
-#             continue
-#
-#         # Phase estimate
-#         phase = m / (2 ** n_qubits)
-#         # Continued fraction approximation
-#         frac = Fraction(phase).limit_denominator(N)
-#         r_candidate = frac.denominator
-#
-#         print(f"  m={m}: phase={m}/{2**n_qubits}={phase:.4f} "
-#               f"-> fraction {frac} -> candidate r={r_candidate}")
-#
-#         # Check if this is a valid period
-#         if mod_exp(a, r_candidate, N) != 1:
-#             # Try multiples of the candidate
-#             found = False
-#             for mult in range(2, N):
-#                 r_try = r_candidate * mult
-#                 if r_try >= N:
-#                     break
-#                 if mod_exp(a, r_try, N) == 1:
-#                     r_candidate = r_try
-#                     print(f"    Adjusted to r={r_candidate} (multiple)")
-#                     found = True
-#                     break
-#             if not found:
-#                 print(f"    a^{r_candidate} mod {N} != 1, not a valid period")
-#                 continue
-#
-#         # Extract factors
-#         f1, f2 = extract_factors(a, r_candidate, N)
-#         if f1 and f2 and f1 != 1 and f2 != 1 and f1 != N and f2 != N:
-#             print(f"    r={r_candidate}: factors {f1} x {f2}")
-#             factors_found.add((min(f1, f2), max(f1, f2)))
-#         else:
-#             print(f"    r={r_candidate}: failed to extract non-trivial factors")
-#
-#     return factors_found
+#     pass  # YOUR CODE HERE
 #
 #
 # # Simulate what we'd get from exercise 3
@@ -382,13 +295,6 @@ print("PREDICT: continued fractions on m=4,12 give r=4, factors 3 x 5\n")
 #   a=2 (period 4), a=4 (period 2), a=7 (period 4),
 #   a=8 (period 4), a=11 (period 2), a=13 (period 4), a=14 (period 2)
 #
-# We demonstrate with a=7 (full quantum circuit) and also verify
-# classically with a=11 (period 2):
-#   11^1 = 11 mod 15, 11^2 = 121 = 1 mod 15 -> r=2
-#   gcd(11^1 + 1, 15) = gcd(12, 15) = 3
-#   gcd(11^1 - 1, 15) = gcd(10, 15) = 5
-#   15 = 3 x 5
-#
 # PREDICT: the algorithm outputs 15 = 3 x 5.
 
 print("=" * 50)
@@ -407,30 +313,7 @@ print("PREDICT: 15 = 3 x 5\n")
 #     Returns:
 #         A cirq.Circuit implementing the quantum part of Shor's algorithm.
 #     """
-#     n_work = int(np.ceil(np.log2(N)))  # 4 qubits for N=15
-#     counting = cirq.LineQubit.range(n_counting)
-#     work = cirq.LineQubit.range(n_counting, n_counting + n_work)
-#
-#     circuit = cirq.Circuit()
-#     # Initialize work register to |1>
-#     circuit.append(cirq.X(work[-1]))
-#     # Hadamard on counting qubits
-#     circuit.append(cirq.H.on_each(*counting))
-#
-#     # Controlled modular multiplications
-#     # counting qubit k controls multiplication by a^(2^(n_counting-1-k)) mod N
-#     for k, c_qubit in enumerate(counting):
-#         power = 2 ** (n_counting - 1 - k)
-#         a_power = pow(a, power, N)
-#         if a_power == 1:
-#             continue  # Identity, skip
-#         circuit.append(controlled_mod_mult(a_power, N, c_qubit, work))
-#
-#     # Inverse QFT
-#     circuit.append(inverse_qft(counting))
-#     # Measure
-#     circuit.append(cirq.measure(*counting, key='result'))
-#     return circuit
+#     pass  # YOUR CODE HERE
 #
 #
 # def shors_algorithm(N, a=None, n_counting=4, shots=1000):
@@ -445,46 +328,7 @@ print("PREDICT: 15 = 3 x 5\n")
 #     Returns:
 #         Tuple of factors, or None if unsuccessful.
 #     """
-#     if a is None:
-#         # Pick random a coprime to N
-#         while True:
-#             a = np.random.randint(2, N)
-#             if math.gcd(a, N) == 1:
-#                 break
-#             else:
-#                 # Lucky! gcd itself is a factor
-#                 other = N // math.gcd(a, N)
-#                 return math.gcd(a, N), other
-#
-#     print(f"Factoring N={N} with a={a}")
-#     print(f"  gcd({a}, {N}) = {math.gcd(a, N)} (confirmed coprime)\n")
-#
-#     # Build and run quantum circuit
-#     circuit = shors_circuit(a, N, n_counting)
-#     print(f"Circuit ({n_counting} counting + {int(np.ceil(np.log2(N)))} work qubits):")
-#     show(circuit, repetitions=shots)
-#
-#     # Collect measurement results
-#     result = simulator.run(circuit, repetitions=shots)
-#     counts = result.histogram(key='result')
-#
-#     print("Measurement histogram:")
-#     for val, count in sorted(counts.items()):
-#         phase = val / (2 ** n_counting)
-#         print(f"  {val:4d} (binary {val:0{n_counting}b}) "
-#               f"-> phase {phase:.4f}  (count: {count})")
-#
-#     # Post-process
-#     print("\nPost-processing:")
-#     factors = post_process(list(counts.keys()), n_counting, a, N)
-#
-#     if factors:
-#         f1, f2 = list(factors)[0]
-#         print(f"\n>>> {N} = {f1} x {f2} <<<")
-#         return f1, f2
-#     else:
-#         print("\nFailed to find factors with this a. Try a different a.")
-#         return None
+#     pass  # YOUR CODE HERE
 #
 #
 # # Run Shor's algorithm with a=7
@@ -496,7 +340,6 @@ print("PREDICT: 15 = 3 x 5\n")
 # print("\n" + "=" * 40)
 # print("Verification: a=11, N=15 (classical)")
 # print("=" * 40 + "\n")
-# # a=11 has period 2: 11^2 = 121 = 1 mod 15
 # r = find_period_classical(11, 15)
 # print(f"a=11, N=15: period r={r}")
 # print(f"  11^(r/2) mod 15 = 11^{r//2} mod 15 = {mod_exp(11, r//2, 15)}")

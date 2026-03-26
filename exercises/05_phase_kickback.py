@@ -30,13 +30,6 @@ import numpy as np
 # ============================================================
 # Put q0 (control) in superposition with H. Prepare q1 (target) in |1>.
 # Apply CZ. Then apply H to q0 and measure.
-#
-# CZ flips the phase when BOTH qubits are |1>. Since |1> is an
-# eigenstate of Z with eigenvalue -1, the phase -1 kicks back
-# to the control qubit:
-#   (|0> + |1>)/sqrt(2) |1>  -->  (|0> - |1>)/sqrt(2) |1>
-#
-# After H on q0: H(|0> - |1>)/sqrt(2) = |1>.
 # PREDICT: what does q0 measure? Always 0, always 1, or 50/50?
 
 print("=" * 50)
@@ -46,10 +39,7 @@ print("PREDICT: what does q0 measure after CZ kickback + H?\n")
 
 # q0, q1 = cirq.LineQubit.range(2)
 # circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.X(q1),
-#     cirq.CZ(q0, q1),
-#     cirq.H(q0),
+#     # YOUR GATES HERE
 #     cirq.measure(q0, key='q0'),
 # ])
 # show(circuit)
@@ -61,12 +51,6 @@ print("PREDICT: what does q0 measure after CZ kickback + H?\n")
 # Prepare target q1 in |-> = (|0> - |1>)/sqrt(2), which is an
 # eigenstate of X with eigenvalue -1. Put q0 in superposition.
 # Apply CNOT(q0, q1). Then H on q0 and measure.
-#
-# CNOT applies X to the target. Since |-> is an eigenstate of X
-# with eigenvalue -1, the phase -1 kicks back to the control:
-#   (|0> + |1>)/sqrt(2) |->  -->  (|0> - |1>)/sqrt(2) |->
-#
-# After H on q0: |1>. Same result as CZ kickback!
 # PREDICT: what does q0 measure?
 
 print("=" * 50)
@@ -76,11 +60,7 @@ print("PREDICT: what does q0 measure after CNOT kickback + H?\n")
 
 # q0, q1 = cirq.LineQubit.range(2)
 # circuit = cirq.Circuit([
-#     cirq.X(q1),
-#     cirq.H(q1),
-#     cirq.H(q0),
-#     cirq.CNOT(q0, q1),
-#     cirq.H(q0),
+#     # YOUR GATES HERE
 #     cirq.measure(q0, key='q0'),
 # ])
 # show(circuit)
@@ -91,9 +71,6 @@ print("PREDICT: what does q0 measure after CNOT kickback + H?\n")
 # ============================================================
 # Prepare q1 in |1> (eigenstate of S with eigenvalue i = e^(i*pi/2)).
 # Put q0 in superposition. Apply controlled-S.
-#
-# The phase i kicks back to q0:
-#   (|0> + |1>)/sqrt(2) |1>  -->  (|0> + i|1>)/sqrt(2) |1>
 #
 # Look at the state vector — the i phase should appear on the
 # |11> amplitude (the component where q0=1, q1=1).
@@ -106,9 +83,7 @@ print("PREDICT: what phase appears on the control qubit?\n")
 
 # q0, q1 = cirq.LineQubit.range(2)
 # circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.X(q1),
-#     cirq.S(q1).controlled_by(q0),
+#     # YOUR GATES HERE
 #     cirq.measure(q0, key='q0'),
 # ])
 # show(circuit)
@@ -133,9 +108,7 @@ print("PREDICT: what phase appears on the control qubit?\n")
 
 # q0, q1 = cirq.LineQubit.range(2)
 # circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.X(q1),
-#     cirq.T(q1).controlled_by(q0),
+#     # YOUR GATES HERE
 #     cirq.measure(q0, key='q0'),
 # ])
 # show(circuit)
@@ -147,13 +120,6 @@ print("PREDICT: what phase appears on the control qubit?\n")
 # What happens if the target is NOT in an eigenstate of the
 # controlled gate? Put q0 in superposition with H. Leave q1
 # in |0> (which is NOT an eigenstate of X). Apply CNOT.
-#
-# Instead of a clean phase on q0, the qubits become entangled!
-# The state vector shows (|00> + |11>)/sqrt(2) — a Bell state.
-# No single qubit carries a phase; the information is shared.
-#
-# This is why kickback requires eigenstates: without them,
-# you get entanglement instead of a clean phase transfer.
 # PREDICT: what does the state vector look like?
 
 print("=" * 50)
@@ -163,8 +129,7 @@ print("PREDICT: what happens when the target is NOT an eigenstate?\n")
 
 # q0, q1 = cirq.LineQubit.range(2)
 # circuit = cirq.Circuit([
-#     cirq.H(q0),
-#     cirq.CNOT(q0, q1),
+#     # YOUR GATES HERE
 # ])
 # show(circuit)
 
@@ -191,8 +156,6 @@ print("PREDICT: how does the phase on q0 change with t?\n")
 # q0, q1 = cirq.LineQubit.range(2)
 # for t in [0.25, 0.5, 0.75]:
 #     circuit = cirq.Circuit([
-#         cirq.H(q0),
-#         cirq.X(q1),
-#         cirq.ZPowGate(exponent=t).on(q1).controlled_by(q0),
+#         # YOUR GATES HERE
 #     ])
 #     show(circuit, label=f"ZPowGate(exponent={t}), phase = e^(i*pi*{t})")
