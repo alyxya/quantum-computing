@@ -1,0 +1,278 @@
+"""Interference patterns. How amplitudes add and cancel to produce deterministic outcomes."""
+
+from utils import show, simulator
+import cirq
+import numpy as np
+
+# ============================================================
+# REFERENCE: Interference in quantum computing
+# ============================================================
+# Quantum gates manipulate amplitudes, not probabilities.
+# Amplitudes can be positive, negative, or complex.
+# When paths recombine:
+#   - Same sign → constructive interference (amplitudes add)
+#   - Opposite sign → destructive interference (amplitudes cancel)
+# This is the key to quantum speedups: arrange circuits so that
+# wrong answers cancel and correct answers reinforce.
+# ============================================================
+
+
+# ============================================================
+# EXERCISE 1: Double Hadamard (H·H = Identity)
+# ============================================================
+# Apply H twice to |0⟩. What happens?
+# PREDICT: what is the final state?
+#
+# Hint: trace the amplitudes step by step.
+#   |0⟩ → H → (|0⟩+|1⟩)/√2 → H → ?
+#   H sends |0⟩→(|0⟩+|1⟩)/√2 and |1⟩→(|0⟩-|1⟩)/√2.
+#   The |0⟩ component of the first H produces +|0⟩ and +|1⟩.
+#   The |1⟩ component of the first H produces +|0⟩ and -|1⟩.
+#   The |1⟩ parts cancel (destructive interference). Result: |0⟩.
+
+print("=" * 50)
+print("EXERCISE 1: Double Hadamard (H·H = Identity)")
+print("=" * 50)
+print("PREDICT: what state does H·H produce from |0⟩?\n")
+
+# q0 = cirq.LineQubit(0)
+# circuit = cirq.Circuit([
+#     cirq.H(q0),
+#     cirq.H(q0),
+#     cirq.measure(q0, key='result'),
+# ])
+# show(circuit)
+
+
+# ============================================================
+# EXERCISE 2: H-Z-H equals X
+# ============================================================
+# We saw in Exercise 01-4 that H-Z-H on |0⟩ gives |1⟩.
+# Is H·Z·H actually the same as the X gate for ANY input?
+# Test on both |0⟩ and |1⟩ and compare with X.
+# PREDICT: are the state vectors identical?
+#
+# Hint: this is a general identity: H·Z·H = X.
+# The Hadamard "conjugates" Z into X (and vice versa).
+
+print("=" * 50)
+print("EXERCISE 2: H-Z-H equals X")
+print("=" * 50)
+print("PREDICT: does H·Z·H give the same result as X?\n")
+
+# q0 = cirq.LineQubit(0)
+
+# # H-Z-H on |0⟩
+# circuit_hzh_0 = cirq.Circuit([
+#     cirq.H(q0),
+#     cirq.Z(q0),
+#     cirq.H(q0),
+# ])
+# show(circuit_hzh_0, label='H-Z-H on |0⟩')
+
+# # X on |0⟩
+# circuit_x_0 = cirq.Circuit([
+#     cirq.X(q0),
+# ])
+# show(circuit_x_0, label='X on |0⟩')
+
+# # H-Z-H on |1⟩
+# circuit_hzh_1 = cirq.Circuit([
+#     cirq.X(q0),
+#     cirq.H(q0),
+#     cirq.Z(q0),
+#     cirq.H(q0),
+# ])
+# show(circuit_hzh_1, label='H-Z-H on |1⟩')
+
+# # X on |1⟩
+# circuit_x_1 = cirq.Circuit([
+#     cirq.X(q0),
+#     cirq.X(q0),
+# ])
+# show(circuit_x_1, label='X on |1⟩')
+
+
+# ============================================================
+# EXERCISE 3: H-S-H — quarter-turn interference
+# ============================================================
+# Replace Z (half-turn, phase of -1) with S (quarter-turn, phase of i).
+# PREDICT: what is the state vector after H-S-H on |0⟩?
+# Is the result deterministic, 50/50, or something else?
+#
+# Hint: trace through:
+#   |0⟩ → H → (|0⟩+|1⟩)/√2 → S → (|0⟩+i|1⟩)/√2 → H → ?
+#   Apply H to each component:
+#     H|0⟩ = (|0⟩+|1⟩)/√2,  H(i|1⟩) = i(|0⟩-|1⟩)/√2
+#   Sum: ((1+i)|0⟩ + (1-i)|1⟩) / 2
+#   |amplitude|² for each: |1+i|²/4 = 2/4 = 0.5. It's 50/50!
+#   But the state has complex amplitudes — different from plain H.
+
+print("=" * 50)
+print("EXERCISE 3: H-S-H — quarter-turn interference")
+print("=" * 50)
+print("PREDICT: what is the state vector after H-S-H?\n")
+
+# q0 = cirq.LineQubit(0)
+# circuit = cirq.Circuit([
+#     cirq.H(q0),
+#     cirq.S(q0),
+#     cirq.H(q0),
+#     cirq.measure(q0, key='result'),
+# ])
+# show(circuit)
+
+
+# ============================================================
+# EXERCISE 4: √X-CZ-√X circuit
+# ============================================================
+# Two qubits. Apply √X to both, then CZ, then √X to both again.
+# √X is a "half NOT" gate: applying it twice gives X.
+# PREDICT: what are the measurement probabilities?
+#
+# Hint: first figure out what happens WITHOUT CZ:
+#   |0⟩ → √X → √X → X|0⟩ = |1⟩ for each qubit.
+#   Without CZ, you'd get deterministic |11⟩.
+#
+#   Now add CZ between the two √X layers. CZ applies phase -1
+#   to |11⟩ only. This disrupts the interference pattern.
+#   The result: uniform 25% for each of |00⟩, |01⟩, |10⟩, |11⟩.
+#
+# Compare both circuits to see the effect of CZ.
+
+print("=" * 50)
+print("EXERCISE 4: √X-CZ-√X circuit")
+print("=" * 50)
+print("PREDICT: what are the probabilities with and without CZ?\n")
+
+# q0, q1 = cirq.LineQubit.range(2)
+
+# # Without CZ: √X √X = X on each qubit → |11⟩
+# circuit_no_cz = cirq.Circuit([
+#     cirq.X(q0) ** 0.5,
+#     cirq.X(q1) ** 0.5,
+#     cirq.X(q0) ** 0.5,
+#     cirq.X(q1) ** 0.5,
+#     cirq.measure(q0, q1, key='result'),
+# ])
+# show(circuit_no_cz, label='Without CZ: √X·√X = X on each qubit')
+
+# # With CZ: interference is disrupted
+# circuit_with_cz = cirq.Circuit([
+#     cirq.X(q0) ** 0.5,
+#     cirq.X(q1) ** 0.5,
+#     cirq.CZ(q0, q1),
+#     cirq.X(q0) ** 0.5,
+#     cirq.X(q1) ** 0.5,
+#     cirq.measure(q0, q1, key='result'),
+# ])
+# show(circuit_with_cz, label='With CZ: interference disrupted')
+
+
+# ============================================================
+# EXERCISE 5: Deutsch's algorithm — constant function f(x) = 0
+# ============================================================
+# Deutsch's algorithm determines if a function f:{0,1}→{0,1} is
+# constant (f(0)=f(1)) or balanced (f(0)≠f(1)) with ONE query.
+#
+# Setup: two qubits. q_in is the input, q_out is the output.
+#   1. Prepare q_out in |1⟩ (apply X)
+#   2. Apply H to both qubits
+#   3. Apply the oracle U_f: |x,y⟩ → |x, y⊕f(x)⟩
+#   4. Apply H to q_in
+#   5. Measure q_in: 0 = constant, 1 = balanced
+#
+# Oracle for f(x) = 0: the identity (do nothing). y⊕0 = y.
+# PREDICT: what does q_in measure?
+#
+# Hint: f(x)=0 is constant, so the algorithm should output 0.
+
+print("=" * 50)
+print("EXERCISE 5: Deutsch's algorithm — f(x) = 0 (constant)")
+print("=" * 50)
+print("PREDICT: what does q_in measure? (0=constant, 1=balanced)\n")
+
+# q_in, q_out = cirq.LineQubit.range(2)
+# circuit = cirq.Circuit([
+#     # Step 1: prepare |01⟩
+#     cirq.X(q_out),
+#     # Step 2: apply H to both
+#     cirq.H(q_in),
+#     cirq.H(q_out),
+#     # Step 3: oracle for f(x) = 0 — identity, no gate needed
+#     # Step 4: apply H to q_in
+#     cirq.H(q_in),
+#     # Step 5: measure q_in
+#     cirq.measure(q_in, key='q_in'),
+# ])
+# show(circuit)
+
+
+# ============================================================
+# EXERCISE 6: Deutsch's algorithm — balanced function f(x) = x
+# ============================================================
+# Oracle for f(x) = x: apply CNOT(q_in, q_out).
+# When q_in=0, target unchanged. When q_in=1, target flips.
+# This implements |x,y⟩ → |x, y⊕x⟩.
+# PREDICT: what does q_in measure?
+#
+# Hint: f(x)=x is balanced (f(0)=0 ≠ f(1)=1), so output should be 1.
+# The CNOT kicks back a phase to q_in through the |−⟩ state on q_out.
+
+print("=" * 50)
+print("EXERCISE 6: Deutsch's algorithm — f(x) = x (balanced)")
+print("=" * 50)
+print("PREDICT: what does q_in measure? (0=constant, 1=balanced)\n")
+
+# q_in, q_out = cirq.LineQubit.range(2)
+# circuit = cirq.Circuit([
+#     # Step 1: prepare |01⟩
+#     cirq.X(q_out),
+#     # Step 2: apply H to both
+#     cirq.H(q_in),
+#     cirq.H(q_out),
+#     # Step 3: oracle for f(x) = x — CNOT
+#     cirq.CNOT(q_in, q_out),
+#     # Step 4: apply H to q_in
+#     cirq.H(q_in),
+#     # Step 5: measure q_in
+#     cirq.measure(q_in, key='q_in'),
+# ])
+# show(circuit)
+
+
+# ============================================================
+# EXERCISE 7: Deutsch's algorithm — f(x) = NOT(x)
+# ============================================================
+# f(x) = 1-x: f(0)=1, f(1)=0. Is this constant or balanced?
+# Design the oracle yourself.
+# PREDICT: what does q_in measure?
+#
+# Hint: f(x) = 1-x is balanced (f(0)≠f(1)), so output should be 1.
+# Oracle: |x,y⟩ → |x, y⊕(1-x)⟩.
+# One approach: X on q_out, then CNOT(q_in, q_out), then X on q_out.
+# This flips q_out unconditionally (X), then flips again when q_in=1 (CNOT),
+# net effect: flip q_out when q_in=0, which is f(x)=1-x.
+
+print("=" * 50)
+print("EXERCISE 7: Deutsch's algorithm — f(x) = NOT(x)")
+print("=" * 50)
+print("PREDICT: what does q_in measure? (0=constant, 1=balanced)\n")
+
+# q_in, q_out = cirq.LineQubit.range(2)
+# circuit = cirq.Circuit([
+#     # Step 1: prepare |01⟩
+#     cirq.X(q_out),
+#     # Step 2: apply H to both
+#     cirq.H(q_in),
+#     cirq.H(q_out),
+#     # Step 3: oracle for f(x) = 1-x
+#     cirq.X(q_out),
+#     cirq.CNOT(q_in, q_out),
+#     cirq.X(q_out),
+#     # Step 4: apply H to q_in
+#     cirq.H(q_in),
+#     # Step 5: measure q_in
+#     cirq.measure(q_in, key='q_in'),
+# ])
+# show(circuit)
