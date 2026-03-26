@@ -39,11 +39,13 @@ print("PREDICT: what is the state vector after X then H?\n")
 
 q0 = cirq.LineQubit(0)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.X(q0),
+    cirq.H(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -60,11 +62,13 @@ print("PREDICT: what is the state vector after H then X?\n")
 
 q0 = cirq.LineQubit(0)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.X(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -81,11 +85,13 @@ print("PREDICT: what are the measurement probabilities?\n")
 
 q0 = cirq.LineQubit(0)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.Z(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -101,11 +107,14 @@ print("PREDICT: what state does H-Z-H produce from |0⟩?\n")
 
 q0 = cirq.LineQubit(0)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.Z(q0),
+    cirq.H(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -122,11 +131,14 @@ print("PREDICT: what are the measurement probabilities?\n")
 
 q0 = cirq.LineQubit(0)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.S(q0),
+    cirq.H(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -143,8 +155,10 @@ print("PREDICT: what gates produce (|0⟩ - |1⟩)/√2?\n")
 
 q0 = cirq.LineQubit(0)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.Z(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
