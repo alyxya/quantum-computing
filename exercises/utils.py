@@ -22,7 +22,9 @@ def show(circuit, repetitions=1000, label=None):
         op for moment in circuit for op in moment
         if not cirq.is_measurement(op)
     )
-    result = simulator.simulate(gates_only)
+    # Use all qubits from the full circuit so idle qubits are included
+    all_qubits = sorted(circuit.all_qubits())
+    result = simulator.simulate(gates_only, qubit_order=all_qubits)
     sv = np.round(result.final_state_vector, 3)
     print(f"Circuit:\n{circuit}\n")
     print(f"State vector: {sv}")
