@@ -30,11 +30,13 @@ print("PREDICT: what state does H·H produce from |0⟩?\n")
 
 q0 = cirq.LineQubit(0)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.H(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -53,28 +55,38 @@ print("PREDICT: does H·Z·H give the same result as X?\n")
 q0 = cirq.LineQubit(0)
 
 # H-Z-H on |0⟩
-# circuit_hzh_0 = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-# ])
-# show(circuit_hzh_0, label='H-Z-H on |0⟩')
+circuit_hzh_0 = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.H(q0),
+    cirq.Z(q0),
+    cirq.H(q0),
+])
+show(circuit_hzh_0, label='H-Z-H on |0⟩')
 
 # X on |0⟩
-# circuit_x_0 = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-# ])
-# show(circuit_x_0, label='X on |0⟩')
+circuit_x_0 = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.X(q0),
+])
+show(circuit_x_0, label='X on |0⟩')
 
 # H-Z-H on |1⟩
-# circuit_hzh_1 = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-# ])
-# show(circuit_hzh_1, label='H-Z-H on |1⟩')
+circuit_hzh_1 = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.X(q0),
+    cirq.H(q0),
+    cirq.Z(q0),
+    cirq.H(q0),
+])
+show(circuit_hzh_1, label='H-Z-H on |1⟩')
 
 # X on |1⟩
-# circuit_x_1 = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-# ])
-# show(circuit_x_1, label='X on |1⟩')
+circuit_x_1 = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.X(q0),
+    cirq.X(q0),
+])
+show(circuit_x_1, label='X on |1⟩')
 
 
 # ============================================================
@@ -91,11 +103,14 @@ print("PREDICT: what is the state vector after H-S-H?\n")
 
 q0 = cirq.LineQubit(0)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.S(q0),
+    cirq.H(q0),
+    cirq.measure(q0, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -115,18 +130,27 @@ print("PREDICT: what are the probabilities with and without CZ?\n")
 q0, q1 = cirq.LineQubit.range(2)
 
 # Without CZ: √X √X = X on each qubit → what state?
-# circuit_no_cz = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit_no_cz, label='Without CZ: √X·√X = X on each qubit')
+circuit_no_cz = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    (cirq.X ** 0.5)(q0),
+    (cirq.X ** 0.5)(q1),
+    (cirq.X ** 0.5)(q0),
+    (cirq.X ** 0.5)(q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_no_cz, label='Without CZ: √X·√X = X on each qubit')
 
 # With CZ: interference is disrupted
-# circuit_with_cz = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit_with_cz, label='With CZ: interference disrupted')
+circuit_with_cz = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    (cirq.X ** 0.5)(q0),
+    (cirq.X ** 0.5)(q1),
+    cirq.CZ(q0, q1),
+    (cirq.X ** 0.5)(q0),
+    (cirq.X ** 0.5)(q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_with_cz, label='With CZ: interference disrupted')
 
 
 # ============================================================
@@ -152,15 +176,20 @@ print("PREDICT: what does q_in measure? (0=constant, 1=balanced)\n")
 
 q_in, q_out = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # Step 1: prepare |01⟩
-#     # Step 2: apply H to both
-#     # Step 3: oracle for f(x) = 0
-#     # Step 4: apply H to q_in
-#     # Step 5: measure q_in
-#     # YOUR CIRCUIT HERE
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # Step 1: prepare |01⟩
+    cirq.X(q_out),
+    # Step 2: apply H to both
+    cirq.H(q_in),
+    cirq.H(q_out),
+    # Step 3: oracle for f(x) = 0
+    # Step 4: apply H to q_in
+    cirq.H(q_in),
+    # Step 5: measure q_in
+    cirq.measure(q_in, key='result'),
+    # YOUR CIRCUIT HERE
+])
+show(circuit)
 
 
 # ============================================================
@@ -178,15 +207,21 @@ print("PREDICT: what does q_in measure? (0=constant, 1=balanced)\n")
 
 q_in, q_out = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # Step 1: prepare |01⟩
-#     # Step 2: apply H to both
-#     # Step 3: oracle for f(x) = x
-#     # Step 4: apply H to q_in
-#     # Step 5: measure q_in
-#     # YOUR CIRCUIT HERE
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # Step 1: prepare |01⟩
+    cirq.X(q_out),
+    # Step 2: apply H to both
+    cirq.H(q_in),
+    cirq.H(q_out),
+    # Step 3: oracle for f(x) = x
+    cirq.CNOT(q_in, q_out),
+    # Step 4: apply H to q_in
+    cirq.H(q_in),
+    # Step 5: measure q_in
+    cirq.measure(q_in, key='result')
+    # YOUR CIRCUIT HERE
+])
+show(circuit)
 
 
 # ============================================================
@@ -203,12 +238,20 @@ print("PREDICT: what does q_in measure? (0=constant, 1=balanced)\n")
 
 q_in, q_out = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # Step 1: prepare |01⟩
-#     # Step 2: apply H to both
-#     # Step 3: oracle for f(x) = 1-x
-#     # Step 4: apply H to q_in
-#     # Step 5: measure q_in
-#     # YOUR CIRCUIT HERE
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # Step 1: prepare |01⟩
+    cirq.X(q_out),
+    # Step 2: apply H to both
+    cirq.H(q_in),
+    cirq.H(q_out),
+    # Step 3: oracle for f(x) = 1-x
+    cirq.X(q_in),
+    cirq.CNOT(q_in, q_out),
+    cirq.X(q_in),
+    # Step 4: apply H to q_in
+    cirq.H(q_in),
+    # Step 5: measure q_in
+    cirq.measure(q_in, key='result')
+    # YOUR CIRCUIT HERE
+])
+show(circuit)
