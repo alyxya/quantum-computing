@@ -36,11 +36,12 @@ print("PREDICT: what is the 4-element state vector?\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -56,11 +57,13 @@ print("PREDICT: what are the four amplitudes?\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.H(q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -78,32 +81,40 @@ print("PREDICT: what does CNOT output for each basis state?\n")
 q0, q1 = cirq.LineQubit.range(2)
 
 # Input |00⟩
-# circuit_00 = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit_00, label='CNOT on |00⟩')
+circuit_00 = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.CNOT(q0, q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_00, label='CNOT on |00⟩')
 
 # Input |01⟩
-# circuit_01 = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit_01, label='CNOT on |01⟩')
+circuit_01 = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.X(q1),
+    cirq.CNOT(q0, q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_01, label='CNOT on |01⟩')
 
 # Input |10⟩
-# circuit_10 = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit_10, label='CNOT on |10⟩')
+circuit_10 = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.X(q0),
+    cirq.CNOT(q0, q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_10, label='CNOT on |10⟩')
 
 # Input |11⟩
-# circuit_11 = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit_11, label='CNOT on |11⟩')
+circuit_11 = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.X(q0),
+    cirq.X(q1),
+    cirq.CNOT(q0, q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_11, label='CNOT on |11⟩')
 
 
 # ============================================================
@@ -120,18 +131,24 @@ print("PREDICT: how do CZ and CNOT outputs differ?\n")
 q0, q1 = cirq.LineQubit.range(2)
 
 # CNOT version:
-# circuit_cnot = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit_cnot, label='CNOT on H|0⟩ ⊗ |1⟩')
+circuit_cnot = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.H(q0),
+    cirq.X(q1),
+    cirq.CNOT(q0, q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_cnot, label='CNOT on H|0⟩ ⊗ |1⟩')
 
 # CZ version:
-# circuit_cz = cirq.Circuit([
-#     # YOUR CIRCUIT HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit_cz, label='CZ on H|0⟩ ⊗ |1⟩')
+circuit_cz = cirq.Circuit([
+    # YOUR CIRCUIT HERE
+    cirq.H(q0),
+    cirq.X(q1),
+    cirq.CZ(q0, q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit_cz, label='CZ on H|0⟩ ⊗ |1⟩')
 
 
 # ============================================================
@@ -147,11 +164,13 @@ print("PREDICT: what is the state after swapping |10⟩?\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.X(q0),
+    cirq.SWAP(q0, q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -167,8 +186,11 @@ print("PREDICT: what are the 8 amplitudes?\n")
 
 q0, q1, q2 = cirq.LineQubit.range(3)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, q1, q2, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.H(q1),
+    cirq.H(q2),
+    cirq.measure(q0, q1, q2, key='result'),
+])
+show(circuit)
