@@ -32,11 +32,13 @@ print("PREDICT: what is the state vector after H then CNOT?\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -53,11 +55,14 @@ print("PREDICT: what gate converts |Φ+⟩ to |Φ−⟩?\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.Z(q0),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -74,11 +79,14 @@ print("PREDICT: what gate converts |Φ+⟩ to |Ψ+⟩?\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.X(q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -95,11 +103,15 @@ print("PREDICT: what gates convert |Φ+⟩ to |Ψ−⟩?\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, q1, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.Z(q0),
+    cirq.CNOT(q0, q1),
+    cirq.X(q1),
+    cirq.measure(q0, q1, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -116,11 +128,14 @@ print("PREDICT: what is the 8-element state vector?\n")
 
 q0, q1, q2 = cirq.LineQubit.range(3)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, q1, q2, key='result'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.CNOT(q1, q2),
+    cirq.measure(q0, q1, q2, key='result'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -137,9 +152,12 @@ print("PREDICT: is q0 deterministic or 50/50 after H-CNOT-H?\n")
 
 q0, q1 = cirq.LineQubit.range(2)
 # Build your circuit here:
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='q0'),
-#     cirq.measure(q1, key='q1'),
-# ])
-# show(circuit)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.H(q0),
+    cirq.measure(q0, key='q0'),
+    cirq.measure(q1, key='q1'),
+])
+show(circuit)
