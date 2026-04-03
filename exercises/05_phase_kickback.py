@@ -37,12 +37,16 @@ print("EXERCISE 1: CZ kickback")
 print("=" * 50)
 print("PREDICT: what does q0 measure after CZ kickback + H?\n")
 
-# q0, q1 = cirq.LineQubit.range(2)
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='q0'),
-# ])
-# show(circuit)
+q0, q1 = cirq.LineQubit.range(2)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.X(q1),
+    cirq.CZ(q0, q1),
+    cirq.H(q0),
+    cirq.measure(q0, key='q0'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -58,12 +62,17 @@ print("EXERCISE 2: CNOT kickback")
 print("=" * 50)
 print("PREDICT: what does q0 measure after CNOT kickback + H?\n")
 
-# q0, q1 = cirq.LineQubit.range(2)
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='q0'),
-# ])
-# show(circuit)
+q0, q1 = cirq.LineQubit.range(2)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q1),
+    cirq.Z(q1),
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+    cirq.H(q0),
+    cirq.measure(q0, key='q0'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -81,12 +90,15 @@ print("EXERCISE 3: S gate kickback")
 print("=" * 50)
 print("PREDICT: what phase appears on the control qubit?\n")
 
-# q0, q1 = cirq.LineQubit.range(2)
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='q0'),
-# ])
-# show(circuit)
+q0, q1 = cirq.LineQubit.range(2)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.X(q1),
+    cirq.H(q0),
+    cirq.S.controlled()(q0, q1),
+    cirq.measure(q0, key='q0'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -106,12 +118,15 @@ print("EXERCISE 4: T gate kickback")
 print("=" * 50)
 print("PREDICT: what phase appears on the control qubit?\n")
 
-# q0, q1 = cirq.LineQubit.range(2)
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-#     cirq.measure(q0, key='q0'),
-# ])
-# show(circuit)
+q0, q1 = cirq.LineQubit.range(2)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.X(q1),
+    cirq.H(q0),
+    cirq.T.controlled()(q0, q1),
+    cirq.measure(q0, key='q0'),
+])
+show(circuit)
 
 
 # ============================================================
@@ -127,11 +142,13 @@ print("EXERCISE 5: Why eigenstates matter")
 print("=" * 50)
 print("PREDICT: what happens when the target is NOT an eigenstate?\n")
 
-# q0, q1 = cirq.LineQubit.range(2)
-# circuit = cirq.Circuit([
-#     # YOUR GATES HERE
-# ])
-# show(circuit)
+q0, q1 = cirq.LineQubit.range(2)
+circuit = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.CNOT(q0, q1),
+])
+show(circuit)
 
 
 # ============================================================
@@ -153,9 +170,12 @@ print("EXERCISE 6: Kickback with arbitrary angle")
 print("=" * 50)
 print("PREDICT: how does the phase on q0 change with t?\n")
 
-# q0, q1 = cirq.LineQubit.range(2)
-# for t in [0.25, 0.5, 0.75]:
-#     circuit = cirq.Circuit([
-#         # YOUR GATES HERE
-#     ])
-#     show(circuit, label=f"ZPowGate(exponent={t}), phase = e^(i*pi*{t})")
+q0, q1 = cirq.LineQubit.range(2)
+for t in [0.25, 0.5, 0.75]:
+    circuit = cirq.Circuit([
+        # YOUR GATES HERE
+        cirq.X(q1),
+        cirq.H(q0),
+        cirq.ZPowGate(exponent=t).on(q1).controlled_by(q0),
+    ])
+    show(circuit, label=f"ZPowGate(exponent={t}), phase = e^(i*pi*{t})")
