@@ -43,16 +43,19 @@ print("EXERCISE 1: QFT on 1 qubit")
 print("=" * 50)
 print("PREDICT: what are the state vectors for QFT|0> and QFT|1>?\n")
 
-# q0 = cirq.LineQubit(0)
-# circuit_0 = cirq.Circuit([
-#     # YOUR GATES HERE (QFT on |0>)
-# ])
-# show(circuit_0, label="QFT|0> (1 qubit)")
-#
-# circuit_1 = cirq.Circuit([
-#     # YOUR GATES HERE (QFT on |1>)
-# ])
-# show(circuit_1, label="QFT|1> (1 qubit)")
+q0 = cirq.LineQubit(0)
+circuit_0 = cirq.Circuit([
+    # YOUR GATES HERE (QFT on |0>)
+    cirq.H(q0),
+])
+show(circuit_0, label="QFT|0> (1 qubit)")
+
+circuit_1 = cirq.Circuit([
+    # YOUR GATES HERE (QFT on |1>)
+    cirq.X(q0),
+    cirq.H(q0),
+])
+show(circuit_1, label="QFT|1> (1 qubit)")
 
 
 # ============================================================
