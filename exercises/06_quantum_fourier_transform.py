@@ -75,19 +75,29 @@ print("EXERCISE 2: QFT on 2 qubits — build by hand")
 print("=" * 50)
 print("PREDICT: what are the amplitudes for QFT|00> and QFT|11>?\n")
 
-# q0, q1 = cirq.LineQubit.range(2)
-#
-# # QFT on |00>
-# qft2_on_00 = cirq.Circuit([
-#     # YOUR GATES HERE
-# ])
-# show(qft2_on_00, label="QFT|00> (2 qubits)")
-#
-# # QFT on |11>
-# qft2_on_11 = cirq.Circuit([
-#     # YOUR GATES HERE (prepare |11> then apply QFT)
-# ])
-# show(qft2_on_11, label="QFT|11> (2 qubits)")
+q0, q1 = cirq.LineQubit.range(2)
+
+# QFT on |00>
+qft2_on_00 = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.S.controlled()(q1, q0),
+    cirq.H(q1),
+    cirq.SWAP(q0, q1),
+])
+show(qft2_on_00, label="QFT|00> (2 qubits)")
+
+# QFT on |11>
+qft2_on_11 = cirq.Circuit([
+    # YOUR GATES HERE (prepare |11> then apply QFT)
+    cirq.X(q0),
+    cirq.X(q1),
+    cirq.H(q0),
+    cirq.S.controlled()(q1, q0),
+    cirq.H(q1),
+    cirq.SWAP(q0, q1),
+])
+show(qft2_on_11, label="QFT|11> (2 qubits)")
 
 
 # ============================================================
