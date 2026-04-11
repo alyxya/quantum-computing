@@ -119,24 +119,28 @@ print("EXERCISE 3: QFT on 2 qubits — verify the matrix")
 print("=" * 50)
 print("PREDICT: does the circuit unitary match the DFT matrix?\n")
 
-# q0, q1 = cirq.LineQubit.range(2)
-# qft2_circuit = cirq.Circuit([
-#     # YOUR QFT GATES HERE (no state prep, no measurement)
-# ])
-#
-# circuit_unitary = np.round(cirq.unitary(qft2_circuit), 3)
-#
-# expected_dft = 0.5 * np.array([
-#     [1,  1,  1,  1],
-#     [1,  1j, -1, -1j],
-#     [1, -1,  1, -1],
-#     [1, -1j, -1, 1j],
-# ])
-# expected_dft = np.round(expected_dft, 3)
-#
-# print(f"Circuit unitary:\n{circuit_unitary}\n")
-# print(f"Expected DFT matrix:\n{expected_dft}\n")
-# print(f"Matrices match: {np.allclose(circuit_unitary, expected_dft)}\n")
+q0, q1 = cirq.LineQubit.range(2)
+qft2_circuit = cirq.Circuit([
+    # YOUR QFT GATES HERE (no state prep, no measurement)
+    cirq.H(q0),
+    cirq.S.controlled()(q1, q0),
+    cirq.H(q1),
+    cirq.SWAP(q0, q1),
+])
+
+circuit_unitary = np.round(cirq.unitary(qft2_circuit), 3)
+
+expected_dft = 0.5 * np.array([
+    [1,  1,  1,  1],
+    [1,  1j, -1, -1j],
+    [1, -1,  1, -1],
+    [1, -1j, -1, 1j],
+])
+expected_dft = np.round(expected_dft, 3)
+
+print(f"Circuit unitary:\n{circuit_unitary}\n")
+print(f"Expected DFT matrix:\n{expected_dft}\n")
+print(f"Matrices match: {np.allclose(circuit_unitary, expected_dft)}\n")
 
 
 # ============================================================
