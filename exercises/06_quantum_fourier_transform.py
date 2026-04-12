@@ -160,19 +160,34 @@ print("EXERCISE 4: QFT on 3 qubits")
 print("=" * 50)
 print("PREDICT: what are the amplitudes for QFT|000> and QFT|001>?\n")
 
-# q0, q1, q2 = cirq.LineQubit.range(3)
-#
-# # QFT on |000>
-# qft3_on_000 = cirq.Circuit([
-#     # YOUR GATES HERE
-# ])
-# show(qft3_on_000, label="QFT|000> (3 qubits)")
-#
-# # QFT on |001>
-# qft3_on_001 = cirq.Circuit([
-#     # YOUR GATES HERE (prepare |001> then apply QFT)
-# ])
-# show(qft3_on_001, label="QFT|001> (3 qubits)")
+q0, q1, q2 = cirq.LineQubit.range(3)
+
+# QFT on |000>
+qft3_on_000 = cirq.Circuit([
+    # YOUR GATES HERE
+    cirq.H(q0),
+    cirq.S(q0).controlled_by(q1),
+    cirq.T(q0).controlled_by(q2),
+    cirq.H(q1),
+    cirq.S(q1).controlled_by(q2),
+    cirq.H(q2),
+    cirq.SWAP(q0, q2),
+])
+show(qft3_on_000, label="QFT|000> (3 qubits)")
+
+# QFT on |001>
+qft3_on_001 = cirq.Circuit([
+    # YOUR GATES HERE (prepare |001> then apply QFT)
+    cirq.X(q2),
+    cirq.H(q0),
+    cirq.S(q0).controlled_by(q1),
+    cirq.T(q0).controlled_by(q2),
+    cirq.H(q1),
+    cirq.S(q1).controlled_by(q2),
+    cirq.H(q2),
+    cirq.SWAP(q0, q2),
+])
+show(qft3_on_001, label="QFT|001> (3 qubits)")
 
 
 # ============================================================
